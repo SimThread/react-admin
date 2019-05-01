@@ -3,6 +3,9 @@
  */
 import axios from 'axios';
 import { get, post, put, del } from './tools';
+import {
+    API_ROOT
+} from '../../config.js';
 import * as config from './config';
 
 export const getBbcNews = () => get({ url: config.NEWS_BBC });
@@ -32,68 +35,68 @@ export const admin = () => get({ url: config.MOCK_AUTH_ADMIN });
 export const guest = () => get({ url: config.MOCK_AUTH_VISITOR });
 
 export const user = (data) => post({
-    url: '/auth/local',
+    url: `${API_ROOT}/auth/local`,
     data: data
 });
 
 export const getCaptcha = () => get({
-    url: '/users/getCaptcha?' + Math.random()
+    url: `${API_ROOT}/users/getCaptcha?${Math.random()}`
 });
 
 export const getMe = () => get({
-    url: '/users/me'
+    url: `${API_ROOT}/users/me`
 });
 
 export const getArticleList = (params) => get({
-    url: '/article/getArticleList',
+    url: `${API_ROOT}/article/getArticleList`,
     params: params,
 });
 
 export const getArticle = (params) => get({
-    url: `/article/${params.id}/getArticle`,
+    url: `${API_ROOT}/article/${params.id}/getArticle`,
 });
 
 export const addAricle = (data) => post({
-    url: `/article/addArticle`,
+    url: `${API_ROOT}/article/addArticle`,
     data,
 })
 
 export const updateArticle = (data) => put({
-    url: `/article/${data._id}/updateArticle`,
+    url: `${API_ROOT}/article/${data._id}/updateArticle`,
     data: data
 });
 
 export const deleteArticle = (params) => del({
-    url: `/article/${params.id}`,
+    url: `${API_ROOT}/article/${params.id}`,
 });
 
 export const getTagCatList = () => get({
-    url: '/tags/getTagCatList'
+    url: '${API_ROOT}/tags/getTagCatList'
 })
 
 export const updateTagCat = (data) => put({
-    url: `/tags/${data._id}/updateTagCat`,
+    url: `${API_ROOT}/tags/${data._id}/updateTagCat`,
     data: data,
 });
 
 export const deleteTagCat = (params) => del({
-    url: `/tags/${params.id}`
+    url: `${API_ROOT}/tags/${params.id}`
 });
 
 export const getTagList = (params) => get({
-    url: `/tags/${params._id}/getTagList`
+    url: `${API_ROOT}/tags/${params._id}/getTagList`
 });
 
 export const updateTag = (data) => put({
-    url: `/tags/${data._id}/updateTag`,
+    url: `${API_ROOT}/tags/${data._id}/updateTag`,
     data,
 });
 
 export const addTag = (data) => post({
-    url: `/tags/addTag`,
+    url: `${API_ROOT}/tags/addTag`,
     data,
 });
 
 export const deleteTag = (data) => del({
-    url: `/tags/${data._id}/deleteTag`,
+    url: `${API_ROOT}/tags/${data._id}/deleteTag`,
 });
