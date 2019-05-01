@@ -71,7 +71,7 @@ export const deleteArticle = (params) => del({
 });
 
 export const getTagCatList = () => get({
-    url: '${API_ROOT}/tags/getTagCatList'
+    url: `${API_ROOT}/tags/getTagCatList`
 })
 
 export const updateTagCat = (data) => put({
