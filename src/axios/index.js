@@ -5,7 +5,7 @@ import axios from 'axios';
 import { get, post, put, del } from './tools';
 import {
     API_ROOT
-} from '../../config.js';
+} from '../config.js';
 import * as config from './config';
 
 export const getBbcNews = () => get({ url: config.NEWS_BBC });
