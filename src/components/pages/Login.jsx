@@ -4,7 +4,8 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { PwaInstaller } from '../widget';
-import { connectAlita } from 'redux-alita';
+import { connectAlita } from '@/reducer';
+import { saveCookie } from '../../utils/authService'
 
 const FormItem = Form.Item;
 
@@ -12,31 +13,44 @@ class Login extends React.Component {
     componentDidMount() {
         const { setAlitaState } = this.props;
         setAlitaState({ stateName: 'auth', data: null });
+        setAlitaState({ stateName: 'captcha', data: { data: '/users/getCaptcha?' + Math.random() } });
     }
     componentDidUpdate(prevProps) { // React 16.3+弃用componentWillReceiveProps
-        const { auth: nextAuth = {}, history } = this.props;
-        // const { history } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
-            localStorage.setItem('user', JSON.stringify(nextAuth.data));
+        const { userInfo = {}, history } = this.props;
+        if (userInfo && userInfo.nickname) { // 判断是否登陆
+            localStorage.setItem('user', JSON.stringify(userInfo));
             history.push('/');
         }
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                const { setAlitaState } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin') setAlitaState({ funcName: 'admin', stateName: 'auth' });
-                if (values.userName === 'guest' && values.password === 'guest') setAlitaState({ funcName: 'guest', stateName: 'auth' });
+                try {
+                    const { setAlitaState } = this.props;
+                    // if (values.userName === 'admin' && values.password === 'admin') setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                    // if (values.userName === 'guest' && values.password === 'guest') setAlitaState({ funcName: 'guest', stateName: 'auth' });
+                    const res = await setAlitaState({ funcName: 'user', stateName: 'auth', params: { email: values.userName, password: values.password, captcha: values.captcha } });
+                    const { token } = res.data;
+                    saveCookie('token', token);
+
+                    setAlitaState({ funcName: 'getMe', stateName: 'userInfo' });
+                } catch(error) {
+                    console.log("error:", error);
+                }
             }
         });
     };
     gitHub = () => {
         window.location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
     };
+    getCaptchaUrl = () => {
+        const { setAlitaState } = this.props;
+        setAlitaState({ stateName: 'captcha', data: { data: '/users/getCaptcha?' + Math.random() } });
+    };
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { captcha = { data: null } } = this.props;
         return (
             <div className="login">
                 <div className="login-form" >
@@ -58,6 +72,16 @@ class Login extends React.Component {
                             })(
                                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="管理员输入admin, 游客输入guest" />
                             )}
+                        </FormItem>
+                        <FormItem>
+                            {getFieldDecorator('captcha', {
+                                rules: [{ required: true, message: '请输入验证码！' }],
+                            })(
+                                <Input type="text" style={{ width: '98px' }} placeholder="请输入验证码" />
+                            )}
+                            <span onClick={this.getCaptchaUrl}>
+                                <img src={captcha.data} alt="验证码" />
+                            </span>
                         </FormItem>
                         <FormItem>
                             {getFieldDecorator('remember', {
@@ -82,4 +106,4 @@ class Login extends React.Component {
     }
 }
 
-export default connectAlita(['auth'])(Form.create()(Login));
+export default connectAlita(['auth', 'captcha', 'userInfo'])(Form.create()(Login));

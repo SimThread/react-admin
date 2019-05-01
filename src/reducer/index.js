@@ -1,32 +1,15 @@
-/**
- * Created by 叶子 on 2017/7/30.
+/*
+ * File: main.js
+ * Desc: 入口文件
+ * File Created: 2019-03-17 15:20:38
+ * Author: chenghao
+ * ------
+ * Copyright 2019 - present, chenghao
  */
-import { combineReducers } from 'redux';
-import * as type from '../action/type';
+import AlitaProvider from './provider/Provider';
+import connectAlita from './utils';
+import { setAlitaState, setConfig } from './action';
 
-const handleData = (state = {isFetching: true, data: {}}, action) => {
-    switch (action.type) {
-        case type.REQUEST_DATA:
-            return {...state, isFetching: true};
-        case type.RECEIVE_DATA:
-            return {...state, isFetching: false, data: action.data};
-        default:
-            return {...state};
-    }
-};
-const httpData = (state = {}, action) => {
-    switch (action.type) {
-        case type.RECEIVE_DATA:
-        case type.REQUEST_DATA:
-            return {
-                ...state,
-                [action.category]: handleData(state[action.category], action)
-            };
-        default:
-            return {...state};
-    }
-};
-
-export default combineReducers({
-    httpData
-});
+export {
+    AlitaProvider, connectAlita, setAlitaState, setConfig,
+}
