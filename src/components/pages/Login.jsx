@@ -6,6 +6,9 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { PwaInstaller } from '../widget';
 import { connectAlita } from '@/reducer';
 import { saveCookie } from '../../utils/authService'
+import {
+    API_ROOT
+} from '../../config.js';
 
 const FormItem = Form.Item;
 
@@ -13,7 +16,7 @@ class Login extends React.Component {
     componentDidMount() {
         const { setAlitaState } = this.props;
         setAlitaState({ stateName: 'auth', data: null });
-        setAlitaState({ stateName: 'captcha', data: { data: '/users/getCaptcha?' + Math.random() } });
+        setAlitaState({ stateName: 'captcha', data: { data: `${API_ROOT}/users/getCaptcha?${Math.random()}` } });
     }
     componentDidUpdate(prevProps) { // React 16.3+弃用componentWillReceiveProps
         const { userInfo = {}, history } = this.props;
@@ -46,7 +49,7 @@ class Login extends React.Component {
     };
     getCaptchaUrl = () => {
         const { setAlitaState } = this.props;
-        setAlitaState({ stateName: 'captcha', data: { data: '/users/getCaptcha?' + Math.random() } });
+        setAlitaState({ stateName: 'captcha', data: { data: `${API_ROOT}/users/getCaptcha?${Math.random()}` } });
     };
     render() {
         const { getFieldDecorator } = this.props.form;

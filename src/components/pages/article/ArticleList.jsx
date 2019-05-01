@@ -207,7 +207,11 @@ class ArticleList extends React.Component {
         },
         ];
         const { selectedRowKeys } = this.state;
-        const { articleList = { data: [], count: 0 } } = this.props;
+        const { articleList = { data: [], count: 0, isFetching: true } } = this.props;
+        if (!articleList.data.length) {
+            articleList.data = [];
+        }
+        console.log('articleList:', articleList);
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,

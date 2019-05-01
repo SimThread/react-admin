@@ -18,7 +18,8 @@ return service({
         params,
         headers
     }).then(res => res.data).catch(err => {
-       message.warn(err.response.data.error_msg);
+    //    message.warn(err.response.data.error_msg);
+        message.warn(msg);
     });
 }
 
@@ -31,7 +32,8 @@ return service({
  */
 export const post = ({url, data, msg = '接口异常', headers}) =>
     service.post(url, data, headers).then(res => res.data).catch(err => {
-        message.warn(err.response.data.error_msg);
+        // message.warn(err.response.data.error_msg);
+        message.warn(msg);
     });
 
 /**
@@ -48,7 +50,8 @@ export const put = ({
         headers
     }) =>
     service.put(url, data, headers).then(res => res.data).catch(err => {
-        message.warn(err.response.data.error_msg);
+        // message.warn(err.response.data.error_msg);
+        message.warn(msg);
     });
 
 export const del = ({
@@ -58,5 +61,6 @@ export const del = ({
         headers
     }) =>
     service.delete(url, data, headers).then(res => res.data).catch(err => {
-        message.warn(err.response.data.error_msg);
+        // message.warn(err.response.data.error_msg);
+        message.warn(msg);
     });
