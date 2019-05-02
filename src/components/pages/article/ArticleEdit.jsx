@@ -5,6 +5,9 @@ import { connectAlita } from '@/reducer';
 import { Upload, Icon, Modal, message } from 'antd';
 import { getCookie } from '@/utils/authService'
 import { updateArticle } from '@/axios/index.js'
+import {
+    API_ROOT
+} from '@/config.js';
 const { TextArea } = Input;
 const { Title } = Typography;
 const { Option, OptGroup } = Select;
@@ -230,7 +233,7 @@ class ArticleEdit extends React.Component {
                     <Title level={4}>图片上传</Title>
                     <div className="clearfix">
                         <Upload
-                            action="http://localhost:9000/article/uploadImage"
+                            action={`${API_ROOT}/article/uploadImage`}
                             listType="picture-card"
                             withCredentials
                             headers={headers}
