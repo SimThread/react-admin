@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie' 
 
-const CookieDomain = process.env.VUE_APP_CookieDomain
+const CookieDomain = (process.env.NODE_ENV === 'production')
+  ? '.dot2thread.com'
+  : ''
 
 let cookieConfig = {}
 if (CookieDomain !== '') {
