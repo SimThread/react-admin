@@ -9,7 +9,7 @@ export default () => (
         <Switch>
             <Route exact path = "/"
             render = {
-                () => <Redirect to = "/app/article/article-list"
+                () => <Redirect to = "/app/dashboard/index"
                 push
                       />
             }

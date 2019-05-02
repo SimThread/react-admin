@@ -1,6 +1,12 @@
 export default {
     menus: [ // 菜单相关路由
         {
+            key: '/app/dashboard/index',
+            title: '首页',
+            icon: 'mobile',
+            component: 'Dashboard'
+        },
+        {
             key: '/app/article', title: '文章管理', icon: 'book',
             subs: [
                 { key: '/app/article/article-list', title: '文章列表', component: 'ArticleList' },
