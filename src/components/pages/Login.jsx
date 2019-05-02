@@ -22,7 +22,7 @@ class Login extends React.Component {
         const { userInfo = {}, history } = this.props;
         if (userInfo && userInfo.nickname) { // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(userInfo));
-            history.push('/');
+            history.push('/app/dashboard/index');
         }
     }
     handleSubmit = (e) => {
