@@ -4,14 +4,19 @@ import { connectAlita } from '@/reducer';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Table, Button, Modal, Input, message } from 'antd';
 import { Link } from 'react-router-dom';
-import { updateTagCat, deleteTagCat } from '@/axios/index.js'
+import { addTagCat, updateTagCat, deleteTagCat } from '@/axios/index.js'
 
 class TagsManage extends React.Component {
     state = {
         selectedRowKeys: [], // Check here to configure the default column
         visible: false,
+        addTagCatVisible: false,
         delConfirmVisible: false,
         currentTagIndex: 0,
+        tagCat: {
+            name: '',
+            desc: '',
+        }
     };
     componentDidMount() {
         const { setAlitaState } = this.props;
@@ -47,10 +52,40 @@ class TagsManage extends React.Component {
         }
     }
 
+    handleOkTagCat = async () => {
+        const { tagCat } = this.state;
+        const { setAlitaState } = this.props;
+
+        try {
+            const res = await addTagCat(tagCat);
+
+            this.setState({
+                addTagCatVisible: false,
+            });
+
+            if (res.success) {
+                setAlitaState({ funcName: 'getTagCatList', stateName: 'tagCatList'});
+                this.setState({
+                    tagCat: {
+                        name: '',
+                        desc: '',
+                    },
+                });
+                message.success('添加标签分类成功');
+            }
+        } catch (err) {
+            console.log('err:', err);
+        }
+    }
+
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
+        });
+    }
+    handleCancelTagCat = () => {
+        this.setState({
+            addTagCatVisible: false,
         });
     }
     handleChangeClass = (e) => {
@@ -97,7 +132,27 @@ class TagsManage extends React.Component {
         }
         return '';
     }
+    handleChangeTagCatName = (e) => {
+        const { tagCat } = this.state;
+        tagCat.name = e.target.value;
+        this.setState({
+            tagCat,
+        });
+    }
+    handleChangeTagCatDesc = (e) => {
+        const { tagCat } = this.state;
+        tagCat.desc = e.target.value;
+        this.setState({
+            tagCat,
+        });
+    }
+    showAddTagCatModal = () => {
+        this.setState({
+            addTagCatVisible: true,
+        });
+    }
     render() {
+        const { tagCat } = this.state;
         const { tagCatList = { data: [], isFetching: true } } = this.props;
         const columns = [{
             title: '分类名',
@@ -133,7 +188,7 @@ class TagsManage extends React.Component {
         return (
             <div>
                 <BreadcrumbCustom first="标签管理" second="标签列表" />
-                <Button type="primary">添加标签分类</Button>
+                <Button type="primary" onClick={this.showAddTagCatModal}>添加标签分类</Button>
                 <div style={{marginTop: '20px'}}>
                     {
                         !tagCatList.isFetching && <Table
@@ -146,7 +201,19 @@ class TagsManage extends React.Component {
                 </div>
 
                 <Modal
-                    title="Basic Modal"
+                    title="添加标签分类"
+                    visible={this.state.addTagCatVisible}
+                    onOk={this.handleOkTagCat}
+                    onCancel={this.handleCancelTagCat}
+                >
+                    <p>分类名 *</p>
+                    <p><Input placeholder="分类名" value={tagCat.name} onChange={this.handleChangeTagCatName} /></p>
+                    <p>分类描述</p>
+                    <p><Input placeholder="分类描述" value={tagCat.desc} onChange={this.handleChangeTagCatDesc} /></p>
+                </Modal>
+
+                <Modal
+                    title="编辑标签分类"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -158,7 +225,7 @@ class TagsManage extends React.Component {
                 </Modal>
 
                 <Modal
-                    title="Basic Modal"
+                    title="删除标签分类"
                     visible={this.state.delConfirmVisible}
                     onOk={this.handleOkDelConfirm}
                     onCancel={this.handleCancelDelConfirm}

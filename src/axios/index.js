@@ -74,6 +74,11 @@ export const getTagCatList = () => get({
     url: `${API_ROOT}/tags/getTagCatList`
 })
 
+export const addTagCat = (data) => post({
+    url: `${API_ROOT}/tags/addTagCat`,
+    data: data,
+});
+
 export const updateTagCat = (data) => put({
     url: `${API_ROOT}/tags/${data._id}/updateTagCat`,
     data: data,

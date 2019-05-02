@@ -6,6 +6,9 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import AllComponents from '../components';
 import routesConfig from './config';
 import queryString from 'query-string';
+import {
+    getCookie
+} from '../utils/authService'
 
 export default class CRouter extends Component {
     requireAuth = (permission, component) => {
@@ -16,10 +19,13 @@ export default class CRouter extends Component {
         return component;
     };
     requireLogin = (component, permission) => {
-        const { auth } = this.props;
-        const permissions = auth.role;
+        // const { auth } = this.props;
+        // const permissions = auth.role;
+        const token = getCookie('token');
+        console.log('auth:', token);
 
-        if (!permissions) { // 线上环境判断是否登录
+        if (!token) { // 线上环境判断是否登录
+            console.log('permissions:', token);
             return <Redirect to={'/login'} />;
         }
         // 暂时注释权限管理
