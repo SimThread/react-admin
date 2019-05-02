@@ -8,11 +8,11 @@ export default () => (
     <Router>
         <Switch>
             <Route exact path = "/"
-            render = {
-                () => <Redirect to = "/app/dashboard/index"
-                push
-                      />
-            }
+                render = {
+                    () => <Redirect to = "/app/article/article-list"
+                    push
+                          />
+                }
             />        
             <Route path="/app" component={App} />
             <Route path="/404" component={NotFound} />
